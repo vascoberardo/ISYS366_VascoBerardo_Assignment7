@@ -1,0 +1,47 @@
+﻿@page "{id:int}"
+@model ISYS366_VascoBerardo_Assignment3.Pages.DetailsModel
+@{
+    ViewData["Title"] = "@Model.Movie.Title - The Retro Movie Store";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+
+        @if (!string.IsNullOrEmpty(Model.Movie.PictureUri))
+        {
+            <img src="@Model.Movie.PictureUri" class="card-img-top"
+                 style="max-height: 400px; object-fit: cover;"
+                 alt="@Model.Movie.Title poster" />
+        }
+        else
+        {
+            <div class="bg-secondary text-white text-center py-5">
+                <span class="fs-4">No Image Available</span>
+            </div>
+        }
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <span class="me-2">#@Model.Movie.Rank</span>
+                @Model.Movie.Title
+            </h4>
+            <span class="fs-5 fw-bold">@Model.Movie.Price.ToString("C")</span>
+        </div>
+
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Release Date</dt>
+                <dd class="col-sm-8">@Model.Movie.ReleaseDate.ToString("M/d/yyyy")</dd>
+
+                <dt class="col-sm-4">Genre</dt>
+                <dd class="col-sm-8">@Model.Movie.Genre</dd>
+            </dl>
+        </div>
+
+        <div class="card-footer d-flex gap-2">
+            <a asp-page="./Index" class="btn btn-outline-secondary btn-sm">Back to List</a>
+            <button class="btn btn-success btn-sm">Add to Cart</button>
+        </div>
+
+    </div>
+</div>

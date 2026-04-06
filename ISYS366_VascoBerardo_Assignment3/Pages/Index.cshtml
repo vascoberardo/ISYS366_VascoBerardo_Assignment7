@@ -1,0 +1,41 @@
+﻿@page
+@model ISYS366_VascoBerardo_Assignment3.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home - The Retro Movie Store";
+}
+
+<div class="row row-cols-1 row-cols-md-3 g-4 py-4">
+    @foreach (var item in Model.Movie)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="col-2 fw-bold">#@item.Rank</span>
+                    <span class="col fw-bold">@item.Title</span>
+                    <span class="col-auto fw-bold text-end">@item.Price.ToString("C")</span>
+                </div>
+
+                @if (!string.IsNullOrEmpty(item.PictureUri))
+                {
+                    <img src="@item.PictureUri" class="card-img-top"
+                         style="height: 400px; object-fit: cover;"
+                         alt="@item.Title poster" />
+                }
+                else
+                {
+                    <div class="bg-secondary text-white text-center py-5">
+                        <span>No Image</span>
+                    </div>
+                }
+
+                <div class="card-body">
+                    <p class="card-text small mb-1">Release Date: @item.ReleaseDate.ToString("M/d/yyyy")</p>
+                    <p class="card-text small mb-3">Genre: @item.Genre</p>
+                    <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Details</a>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
