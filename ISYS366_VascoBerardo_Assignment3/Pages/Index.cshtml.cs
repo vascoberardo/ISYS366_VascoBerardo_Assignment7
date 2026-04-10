@@ -7,21 +7,18 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ISYS366_VascoBerardo_Assignment3Context _context;
+        private readonly MovieRepoEf _repo;
 
         public IndexModel(ISYS366_VascoBerardo_Assignment3Context context)
         {
-            _context = context;
+            _repo = new MovieRepoEf(context);
         }
 
-        public IList<Movie> Movie { get; set; } = default!;
+        public IEnumerable<ISYS366_VascoBerardo_Assignment3.Models.Movie> Movie { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Movie = await _context.Movie
-                .OrderBy(m => m.Rank)
-                .ThenBy(m => m.Title)
-                .ToListAsync();
+            Movie = await _repo.GetAllMoviesAsync();
         }
     }
 }
