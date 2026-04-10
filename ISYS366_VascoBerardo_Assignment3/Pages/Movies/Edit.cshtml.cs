@@ -16,12 +16,12 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
 {
     public class EditModel : PageModel
     {
-        private readonly ISYS366_VascoBerardo_Assignment3.Data.ISYS366_VascoBerardo_Assignment3Context _context;
+        private readonly IMovieRepo _repo;
         private readonly IWebHostEnvironment _env;
 
-        public EditModel(ISYS366_VascoBerardo_Assignment3.Data.ISYS366_VascoBerardo_Assignment3Context context, IWebHostEnvironment env)
+        public EditModel(IMovieRepo repo, IWebHostEnvironment env)
         {
-            _context = context;
+            _repo = repo;
             _env = env;
         }
 
@@ -37,7 +37,7 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
             {
                 return NotFound();
             }
-            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _repo.GetByIdAsync(id.Value);
             if (movie == null)
             {
                 return NotFound();
@@ -60,19 +60,13 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
             }
             else
             {
-                var existing = await _context.Movie.AsNoTracking()
-                    .FirstOrDefaultAsync(m => m.Id == Movie.Id);
+                var existing = await _repo.GetByIdAsync(Movie.Id);
                 Movie.PictureUri = existing?.PictureUri ?? string.Empty;
             }
 
-            _context.Attach(Movie).State = EntityState.Modified; await _context.SaveChangesAsync();
+            await _repo.UpdateMovieAsync(Movie);
 
             return RedirectToPage("./Index");
-        }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movie.Any(e => e.Id == id);
         }
     }
 }

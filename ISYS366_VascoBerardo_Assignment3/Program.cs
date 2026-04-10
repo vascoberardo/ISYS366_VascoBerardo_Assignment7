@@ -37,6 +37,9 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AuthorizeFolder("/Movies", "AdminPolicy");
 });
 
+builder.Services.AddScoped<IMovieRepo, MovieRepoEf>();
+//builder.Services.AddSingleton<IMovieRepo, MovieRepoList>();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();

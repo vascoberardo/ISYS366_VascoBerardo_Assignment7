@@ -7,14 +7,14 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly MovieRepoEf _repo;
+        private readonly IMovieRepo _repo;
 
-        public IndexModel(ISYS366_VascoBerardo_Assignment3Context context)
+        public IndexModel(IMovieRepo repo)
         {
-            _repo = new MovieRepoEf(context);
+            _repo = repo;
         }
 
-        public IEnumerable<ISYS366_VascoBerardo_Assignment3.Models.Movie> Movie { get; set; } = default!;
+        public IEnumerable<Movie> Movie { get; set; } = default!;
 
         public async Task OnGetAsync()
         {

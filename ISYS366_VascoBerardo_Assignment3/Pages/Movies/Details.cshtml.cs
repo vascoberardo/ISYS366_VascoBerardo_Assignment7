@@ -12,11 +12,11 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
 {
     public class DetailsModel : PageModel
     {
-        private readonly ISYS366_VascoBerardo_Assignment3.Data.ISYS366_VascoBerardo_Assignment3Context _context;
+        private readonly IMovieRepo _repo;
 
-        public DetailsModel(ISYS366_VascoBerardo_Assignment3.Data.ISYS366_VascoBerardo_Assignment3Context context)
+        public DetailsModel(IMovieRepo repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         public Movie Movie { get; set; } = default!;
@@ -28,7 +28,7 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _repo.GetByIdAsync(id.Value);
 
             if (movie is not null)
             {

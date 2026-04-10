@@ -13,11 +13,11 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
 {
     public class IndexModel : PageModel
     {
-        private readonly ISYS366_VascoBerardo_Assignment3.Data.ISYS366_VascoBerardo_Assignment3Context _context;
+        private readonly IMovieRepo _repo;
 
-        public IndexModel(ISYS366_VascoBerardo_Assignment3.Data.ISYS366_VascoBerardo_Assignment3Context context)
+        public IndexModel(IMovieRepo repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         public IList<Movie> Movie { get;set; } = default!;
@@ -32,31 +32,10 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
 
         public async Task OnGetAsync()
         {
-            // <snippet_search_linqQuery>
-            IQueryable<string> genreQuery = from m in _context.Movie
-                                            orderby m.Genre
-                                            select m.Genre;
-            // </snippet_search_linqQuery>
+            var genres = await _repo.GetAllGenresAsync();
+            Genres = new SelectList(genres);
 
-            var movies = from m in _context.Movie
-                         select m;
-
-            movies = movies.OrderBy(m => m.Rank);
-
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                movies = movies.Where(s => s.Title.Contains(SearchString));
-            }
-
-            if (!string.IsNullOrEmpty(MovieGenre))
-            {
-                movies = movies.Where(x => x.Genre == MovieGenre);
-            }
-
-            // <snippet_search_selectList>
-            Genres = new SelectList(await genreQuery.Distinct().ToListAsync());
-            // </snippet_search_selectList>
-            Movie = await movies.ToListAsync();
+            Movie = await _repo.SearchMoviesAsync(SearchString, MovieGenre);
         }
     }
 }

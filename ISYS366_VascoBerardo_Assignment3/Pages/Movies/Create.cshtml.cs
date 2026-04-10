@@ -14,11 +14,11 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
 {
     public class CreateModel : PageModel
     {
-        private readonly ISYS366_VascoBerardo_Assignment3.Data.ISYS366_VascoBerardo_Assignment3Context _context;
+        private readonly IMovieRepo _repo;
         private readonly IWebHostEnvironment _env;
-        public CreateModel(ISYS366_VascoBerardo_Assignment3.Data.ISYS366_VascoBerardo_Assignment3Context context, IWebHostEnvironment env)
+        public CreateModel(IMovieRepo repo, IWebHostEnvironment env)
         {
-            _context = context;
+            _repo = repo;
             _env = env;
         }
 
@@ -47,8 +47,7 @@ namespace ISYS366_VascoBerardo_Assignment3.Pages.Movies
                 Movie.PictureUri = string.Empty;
             }
 
-            _context.Movie.Add(Movie);
-            await _context.SaveChangesAsync();
+            await _repo.AddMovieAsync(Movie);
 
             return RedirectToPage("./Index");
         }
