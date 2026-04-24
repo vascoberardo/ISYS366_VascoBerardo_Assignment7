@@ -37,7 +37,14 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AuthorizeFolder("/Movies", "AdminPolicy");
 });
 
-builder.Services.AddScoped<IMovieRepo, MovieRepoEf>();
+//HTTP Client
+builder.Services.AddHttpClient<IMovieRepo, MovieRepoApi>(client =>
+{
+    var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
+    client.BaseAddress = new Uri(apiBaseAddress ?? "http://localhost:5005");
+});
+
+//builder.Services.AddScoped<IMovieRepo, MovieRepoEf>();
 //builder.Services.AddSingleton<IMovieRepo, MovieRepoList>();
 
 var app = builder.Build();
